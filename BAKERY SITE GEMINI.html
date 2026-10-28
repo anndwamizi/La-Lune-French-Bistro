@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Game Bakery - Klik Roti</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: #fff0e6;
+            color: #663300;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        header {
+            background-color: #ffcc99;
+            padding: 20px;
+            font-size: 2em;
+            font-weight: bold;
+            border-bottom: 3px solid #cc9966;
+        }
+        #gameArea {
+            position: relative;
+            width: 100vw;
+            height: 80vh;
+            background: #fff8f0 url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80') no-repeat center center;
+            background-size: cover;
+        }
+        #bakeryBread {
+            width: 80px;
+            height: 80px;
+            position: absolute;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.2s ease;
+        }
+        #bakeryBread:active {
+            transform: scale(0.9);
+        }
+        #scoreBoard {
+            margin-top: 15px;
+            font-size: 1.5em;
+        }
+        #instructions {
+            margin: 10px;
+            font-size: 1.1em;
+        }
+        footer {
+            margin-top: 10px;
+            color: #aa7733;
+        }
+    </style>
+</head>
+<body>
+
+<header>Game Bakery - Klik Roti!</header>
+
+<div id="instructions">Klik roti yang muncul untuk kumpul mata!</div>
+
+<div id="gameArea">
+    <img id="bakeryBread" src="https://png.pngtree.com/png-vector/20191102/ourmid/pngtree-bread-png-image_1936917.jpg" alt="Roti" style="display:none" />
+</div>
+
+<div id="scoreBoard">Mata: 0</div>
+
+<footer>Selamat bermain! &nbsp;🍞🍰🥐</footer>
+
+<script>
+    const bread = document.getElementById('bakeryBread');
+    const gameArea = document.getElementById('gameArea');
+    const scoreBoard = document.getElementById('scoreBoard');
+
+    let score = 0;
+
+    function randomPosition() {
+        const maxX = gameArea.clientWidth - bread.width;
+        const maxY = gameArea.clientHeight - bread.height;
+        const x = Math.floor(Math.random() * maxX);
+        const y = Math.floor(Math.random() * maxY);
+        return {x, y};
+    }
+
+    function showBread() {
+        const pos = randomPosition();
+        bread.style.left = pos.x + 'px';
+        bread.style.top = pos.y + 'px';
+        bread.style.display = 'block';
+    }
+
+    bread.addEventListener('click', () => {
+        score++;
+        scoreBoard.textContent = 'Mata: ' + score;
+        bread.style.display = 'none';
+
+        // Tampil balik roti selepas 800ms
+        setTimeout(showBread, 800);
+    });
+
+    // Mula game dengan muncul roti pertama kali
+    window.onload = () => {
+        showBread();
+    }
+</script>
+
+</body>
+</html>
