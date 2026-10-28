@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Game Bakery - Baking & Klik Roti</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: #fff0e6;
+            color: #663300;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        header {
+            background-color: #ffcc99;
+            padding: 20px;
+            font-size: 2em;
+            font-weight: bold;
+            border-bottom: 3px solid #cc9966;
+        }
+        #gameArea {
+            position: relative;
+            width: 100vw;
+            height: 70vh;
+            background: #fff8f0 url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80') no-repeat center center;
+            background-size: cover;
+            margin-bottom: 10px;
+        }
+        #bakeryBread {
+            width: 80px;
+            height: 80px;
+            position: absolute;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.2s ease;
+            display: none;
+        }
+        #bakeryBread:active {
+            transform: scale(0.9);
+        }
+        #scoreBoard {
+            margin-top: 10px;
+            font-size: 1.5em;
+        }
+        #instructions {
+            margin: 10px;
+            font-size: 1.1em;
+        }
+        #bakeButton {
+            padding: 12px 25px;
+            background-color: #ff9966;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            cursor: pointer;
+            color: white;
+            transition: background-color 0.3s ease;
+            margin-bottom: 10px;
+        }
+        #bakeButton:disabled {
+            background-color: #cc7a4f;
+            cursor: not-allowed;
+        }
+        #statusText {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            height: 24px;
+            color: #cc6600;
+            font-weight: bold;
+        }
+        footer {
+            margin-top: 15px;
+            color: #aa7733;
+        }
+    </style>
+</head>
+<body>
+
+<header>Game Bakery - Baking & Klik Roti!</header>
+
+<div id="instructions">Klik butang "Bake" untuk membakar roti. Setelah selesai, klik roti untuk kumpul mata!</div>
+
+<div id="gameArea">
+    <img id="bakeryBread" src="https://png.pngtree.com/png-vector/20191102/ourmid/pngtree-bread-png-image_1936917.jpg" alt="Roti" />
+</div>
+
+<button id="bakeButton">Bake</button>
+<div id="statusText"></div>
+
+<div id="scoreBoard">Mata: 0</div>
+
+<footer>Selamat bermain! &nbsp;🍞🍰🥐</footer>
+
+<script>
+    const bread = document.getElementById('bakeryBread');
+    const gameArea = document.getElementById('gameArea');
+    const scoreBoard = document.getElementById('scoreBoard');
+    const bakeButton = document.getElementById('bakeButton');
+    const statusText = document.getElementById('statusText');
+
+    let score = 0;
+    let bakingInProgress = false;
+
+    function randomPosition() {
+        const maxX = gameArea.clientWidth - bread.width;
+        const maxY = gameArea.clientHeight - bread.height;
+        const x = Math.floor(Math.random() * maxX);
+        const y = Math.floor(Math.random() * maxY);
+        return {x, y};
+    }
+
+    function showBread() {
+        const pos = randomPosition();
+        bread.style.left = pos.x + 'px';
+        bread.style.top = pos.y + 'px';
+        bread.style.display = 'block';
+        bread.style.pointerEvents = 'auto'; // enable click
+        statusText.textContent = "Roti sudah siap! Klik untuk kumpul mata.";
+    }
+
+    function bakeBread() {
+        bakingInProgress = true;
+        bakeButton.disabled = true;
+        bread.style.display = 'none';
+        statusText.textContent = "Baking... Sabar sebentar ya! 🍞🔥";
+
+        // Simulasi baking selama 3 saat
+        setTimeout(() => {
+            bakingInProgress = false;
+            bakeButton.disabled = false;
+            showBread();
+        }, 3000);
+    }
+
+    bread.addEventListener('click', () => {
+        if (bakingInProgress) return; // tak boleh klik masa baking
+        score++;
+        scoreBoard.textContent = 'Mata: ' + score;
+        bread.style.display = 'none';
+        statusText.textContent = "Klik 'Bake' untuk bakar roti baru.";
+    });
+
+    bakeButton.addEventListener('click', () => {
+        if (!bakingInProgress) {
+            bakeBread();
+        }
+    });
+
+    // Mula game tanpa roti, pengguna kena klik "Bake" dulu
+    window.onload = () => {
+        bread.style.display = 'none';
+        statusText.textContent = "Klik 'Bake' untuk mula membakar roti!";
+    }
+</script>
+
+</body>
+</html>
